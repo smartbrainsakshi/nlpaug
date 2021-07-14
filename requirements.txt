@@ -6,3 +6,4 @@ torchvision==0.9.1+cpu
 nltk==3.6.2
 nlpaug==1.1.4
 gunicorn==19.8.1
+requests==2.18.4
