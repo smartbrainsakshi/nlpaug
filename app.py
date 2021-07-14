@@ -12,8 +12,6 @@ def my_form():
 @app.route('/index', methods=['POST'])
 def my_form_post():
     text = request.form['text']
-    nltk.download('averaged_perceptron_tagger')
-    nltk.download('wordnet')
     if request.form['group1'] == 'Positive':
         aug = naw.SynonymAug(aug_src='wordnet')
     else:
