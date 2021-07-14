@@ -1,0 +1,54 @@
+ <!-- Compiled and minified CSS -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+ <!-- Compiled and minified JavaScript -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+         
+
+ <nav class="green">
+    <div class="nav-wrapper">
+      <a href="" class="brand-logo">Text Augmentation</a>
+    </div>
+  </nav>
+
+
+
+ <div class="row">
+    <div class="col s12">
+        <form action="{{ url_for('my_form_post') }}" method="post">
+      <div class="row">
+        <div class="input-field col s12">
+            <input name = "text" id="text" type="text" value="{{input_text}}" class="validate">
+            <label for="text">Input Text</label>
+        </div>
+        <div class="input-field col s12">
+            <p>
+                <label>
+                  <input name="group1" class="with-gap" type="radio" value="Positive"/>
+                  <span>Positive</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input name="group1" class="with-gap" type="radio" value="Negative"/>
+                  <span>Negative</span>
+                </label>
+              </p>
+        </div>
+        <div class="input-field col s12"></div>
+            <input type="submit" />
+        </div>
+       </form>
+       {% if result %}
+       <ul class="collection">
+           {% for each in result %}
+        <li class="collection-item">{{each}}</li>
+           {% endfor %}
+      </ul>
+      {% endif %}
+    
+      </div>
+    </div>
+  </div>
+
+
