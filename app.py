@@ -18,11 +18,11 @@ def my_form_post():
         aug = naw.SynonymAug(aug_src='wordnet')
         result = aug.augment(text,n=2)
     else:
+        aug = naw.AntonymAug()
+        result.extend(aug.augment(text,n=5))
         kaug = nac.KeyboardAug()
         result.append(kaug.augment(text,n=1))
-        aug = naw.AntonymAug()
-        result.append(aug.augment(text,n=5))
-        result.append(kaug.augment(result[1],n=1))
+        result.append(kaug.augment(result[5],n=1))
 
     return render_template('index.html', result=result, input_text=text)
 
