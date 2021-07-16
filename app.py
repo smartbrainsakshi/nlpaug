@@ -78,8 +78,8 @@ def get_with_special_char(text):
     """
     replace char in text
     """
-    # get random indexes to be replaced with special characters which will be minimum()
-    indexes = random.sample(range(0, len(text)), min(round(len(text)/2), 15))
+    # get random indexes to be replaced with special characters which will be 35% of sentence but not more than 15 chars
+    indexes = random.sample(range(0, len(text)), min(round(len(text)*35/100), 15))
     for index in indexes:
         text = text[:index] + random.choice(string.punctuation) + text[index + 1:]
 
