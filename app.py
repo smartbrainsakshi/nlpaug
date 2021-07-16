@@ -18,9 +18,9 @@ def my_form_post():
     if request.form['group1'] == 'Positive':
         t = EDA()
         result = [
-            t.random_swap("John is going to town"),
-            t.random_deletion("John is going to town", p=0.2),
-            t.random_insertion("John is going to town"),
+            t.random_swap(text),
+            t.random_deletion(text, p=0.2),
+            t.random_insertion(text),
         ]
     else:
         aug = nac.OcrAug()
