@@ -58,19 +58,15 @@ def evaluate_negative_augmentation(text):
     #2. insert n words in the half sentence, where n = half of size of sentence
     try:
         rand_index = random.randint(0,n)
-        result.append(["Insert words in first half of sentence: ", t.random_insertion(sentence=words[rand_index], n=n)+ " " +rem_txt])
+        result.append(["Insert sentence ", t.random_insertion(sentence=words[rand_index], n=n)+ " " +rem_txt])
     except:
         pass
     #3. make antonym of whole text and insert a special character at any position
     result.append(["Special character insertion: ", get_with_special_char(text)])
     #4. swap half of the sentence
     result.append(["Swap in the first half of sentence: ", t.random_swap(half_txt)+ " " +rem_txt])
-    #5. make half sentence antonym
-    result.append(["Antonym of half sentence: ", naw.AntonymAug().augment(half_txt, n=1)+ " " +rem_txt])
-    #6. insert one random word in half text
-    result.append(["Random one word insertion in first half: ", t.random_insertion(half_txt)+ " " +rem_txt])
-    #7. antonym of half and insert random char in another half
-    result.append(["Antonym of first half and random character in second half: ", naw.AntonymAug().augment(half_txt, n=1) + " " + nac.RandomCharAug('insert').augment(rem_txt, n=1)])
+    #5. insert one random word in half text
+    result.append(["Sentence insertion ", t.random_insertion(half_txt)+ " " +rem_txt])
     return result
 
 
