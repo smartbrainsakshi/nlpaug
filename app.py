@@ -57,8 +57,11 @@ def evaluate_negative_augmentation(text):
     #1. make antonym of whole text
     result.append(naw.AntonymAug().augment(text, n=1))
     #2. insert n words in the half sentence, where n = half of size of sentence
-    rand_index = random.randint(0,n)
-    result.append(t.random_insertion(sentence=words[rand_index], n=n)+ " " +rem_txt)
+    try:
+        rand_index = random.randint(0,n)
+        result.append(t.random_insertion(sentence=words[rand_index], n=n)+ " " +rem_txt)
+    except:
+        pass
     #3. make antonym of whole text and insert a special character at any position
     result.append(get_antonym_with_special_char(t, words, len(words)))
     #4. swap half of the sentence
