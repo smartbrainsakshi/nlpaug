@@ -27,8 +27,7 @@ def my_form_post():
             ["Random word swap: ", t.random_swap(text)],
             ["Random word delete: ", t.random_deletion(text, p=0.3)],
             ["Random word insert: ", t.random_insertion(text)],
-            ["Synonym Augmentation 1: ", naw.SynonymAug(aug_src='wordnet').augment(text, n=1)],
-            ["Synonym Augmentation 1: ", t1.augment(text)],
+            ["Synonym Augmentation: ", naw.SynonymAug(aug_src='wordnet').augment(text, n=1)],
             ["OCR Augmentation: ", nac.OcrAug().augment(text, n=1)],
             ["KeyBoard Augmentation: ", nac.KeyboardAug().augment(text, n=1)],
             ["Random Char insert", nac.RandomCharAug('insert').augment(text, n=1)],
@@ -63,7 +62,7 @@ def evaluate_negative_augmentation(text):
     except:
         pass
     #3. make antonym of whole text and insert a special character at any position
-    result.append(["Antonym of text and a special character: ", get_antonym_with_special_char(t, words, len(words))])
+    result.append(["Special character insertion: ", get_with_special_char(text)])
     #4. swap half of the sentence
     result.append(["Swap in the first half of sentence: ", t.random_swap(half_txt)+ " " +rem_txt])
     #5. make half sentence antonym
@@ -72,20 +71,19 @@ def evaluate_negative_augmentation(text):
     result.append(["Random one word insertion in first half: ", t.random_insertion(half_txt)+ " " +rem_txt])
     #7. antonym of half and insert random char in another half
     result.append(["Antonym of first half and random character in second half: ", naw.AntonymAug().augment(half_txt, n=1) + " " + nac.RandomCharAug('insert').augment(rem_txt, n=1)])
-    #8. antonym of half and swap char in other half
-    result.append(["Antonym of first half and swap character in second half: ", naw.AntonymAug().augment(rem_txt, n=1) + " " + nac.RandomCharAug('swap').augment(half_txt, n=1)])
-    #9. antonym of half and swap word in another half
-    result.append(["Antonym of first half and swap word in second half: ", naw.AntonymAug().augment(rem_txt, n=1)+ " " +t.random_swap(half_txt),])
     return result
 
 
-def get_antonym_with_special_char(t, words, n):
+def get_with_special_char(text):
     """
-    replace char in antonym augmentation
+    replace char in text
     """
-    s = " ".join(naw.AntonymAug().augment(words, n=1))
-    index = random.randint(0,n)
-    return s[:index] + random.choice(string.punctuation)  + s[index + 1:]
+    # get random indexes to be replaced with special characters which will be minimum()
+    indexes = random.sample(range(0, len(text)), min(round(len(text)/2), 15))
+    for index in indexes:
+        text = text[:index] + random.choice(string.punctuation) + text[index + 1:]
+
+    return text
 
 
 def text_to_emoji(text):
