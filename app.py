@@ -27,7 +27,6 @@ def my_form_post():
             t.random_insertion(text),
             naw.SynonymAug(aug_src='wordnet').augment(text, n=1),
             t1.augment(text),
-            en.add_synonyms(text, p=1.0),
             nac.OcrAug().augment(text, n=1),
             nac.KeyboardAug().augment(text, n=1),
             nac.RandomCharAug('insert').augment(text, n=1),
@@ -43,7 +42,7 @@ def my_form_post():
         rem_txt = " ".join(words[int(len(words)/2):])
         n = int(len(words)/2)
         
-        
+
         #0. replace with emojis
         result.append(text_to_emoji(text))
         #1. make antonym of whole text
@@ -69,6 +68,7 @@ def my_form_post():
     return render_template('index.html', result=result, input_text=text)
 
 
+
 def get_special_char(t, words, n):
 
     s = " ".join(naw.AntonymAug().augment(words, n=1))
@@ -79,7 +79,6 @@ def get_special_char(t, words, n):
 def text_to_emoji(text):
     text = text.replace(",","").replace(".","")
     new_sentence = " ".join([":"+s+":" for s in text.split(" ")])
-    print(new_sentence)
     emojized =  emoji.emojize(new_sentence, use_aliases=True).split(" ")
 
     sent = []
@@ -88,7 +87,6 @@ def text_to_emoji(text):
             sent.append(each)
         else:
             sent.append(each.replace(":", ""))
-    print(sent)
     return " ".join(sent)
 
 
