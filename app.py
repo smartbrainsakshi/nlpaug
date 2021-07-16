@@ -19,7 +19,7 @@ def my_form_post():
         t = EDA()
         result = [
             t.random_swap(text),
-            t.random_deletion(text, p=0.3), # this did not work lookslike
+            t.random_deletion(text, p=0.3),
             t.random_insertion(text),
         ]
     else:
