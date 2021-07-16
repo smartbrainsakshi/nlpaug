@@ -41,11 +41,22 @@
         </div>
        </form>
        {% if result %}
-       <ul class="collection">
-           {% for each in result %}
-        <li class="collection-item">{{each}}</li>
-           {% endfor %}
-      </ul>
+      <table class="striped">
+        <thead>
+          <tr>
+              <th>Logic</th>
+              <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for each in result %}
+          <tr>
+            <td>{{each[0]}}</td>
+            <td>{{each[1]}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
       {% endif %}
     
       </div>

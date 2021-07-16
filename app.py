@@ -24,16 +24,16 @@ def my_form_post():
         t = EDA()
         t1 = Wordnet()
         result = [
-            t.random_swap(text),
-            t.random_deletion(text, p=0.3),
-            t.random_insertion(text),
-            naw.SynonymAug(aug_src='wordnet').augment(text, n=1),
-            t1.augment(text),
-            nac.OcrAug().augment(text, n=1),
-            nac.KeyboardAug().augment(text, n=1),
-            nac.RandomCharAug('insert').augment(text, n=1),
-            nac.RandomCharAug('swap').augment(text, n=1),
-            nac.RandomCharAug('delete').augment(text, n=1),
+            ["Random word swap: ", t.random_swap(text)],
+            ["Random word delete: ", t.random_deletion(text, p=0.3)],
+            ["Random word insert: ", t.random_insertion(text)],
+            ["Synonym Augmentation 1: ", naw.SynonymAug(aug_src='wordnet').augment(text, n=1)],
+            ["Synonym Augmentation 1: ", t1.augment(text)],
+            ["OCR Augmentation: ", nac.OcrAug().augment(text, n=1)],
+            ["KeyBoard Augmentation: ", nac.KeyboardAug().augment(text, n=1)],
+            ["Random Char insert", nac.RandomCharAug('insert').augment(text, n=1)],
+            ["Random Char swap", nac.RandomCharAug('swap').augment(text, n=1)],
+            ["Random Char delete", nac.RandomCharAug('delete').augment(text, n=1)],
         ]
 
     else:
@@ -53,29 +53,29 @@ def evaluate_negative_augmentation(text):
     result = []
 
     #0. replace with emojis
-    result.append(text_to_emoji(text))
+    result.append(["Text to emoji: ", text_to_emoji(text)])
     #1. make antonym of whole text
-    result.append(naw.AntonymAug().augment(text, n=1))
+    result.append(["Antonym of text: ", naw.AntonymAug().augment(text, n=1)])
     #2. insert n words in the half sentence, where n = half of size of sentence
     try:
         rand_index = random.randint(0,n)
-        result.append(t.random_insertion(sentence=words[rand_index], n=n)+ " " +rem_txt)
+        result.append(["Insert words in first half of sentence: ", t.random_insertion(sentence=words[rand_index], n=n)+ " " +rem_txt])
     except:
         pass
     #3. make antonym of whole text and insert a special character at any position
-    result.append(get_antonym_with_special_char(t, words, len(words)))
+    result.append(["Antonym of text and a special character: ", get_antonym_with_special_char(t, words, len(words))])
     #4. swap half of the sentence
-    result.append(t.random_swap(half_txt)+ " " +rem_txt)
+    result.append(["Swap in the first half of sentence: ", t.random_swap(half_txt)+ " " +rem_txt])
     #5. make half sentence antonym
-    result.append(naw.AntonymAug().augment(half_txt, n=1)+ " " +rem_txt)
+    result.append(["Antonym of half sentence: ", naw.AntonymAug().augment(half_txt, n=1)+ " " +rem_txt])
     #6. insert one random word in half text
-    result.append(t.random_insertion(half_txt)+ " " +rem_txt)
+    result.append(["Random one word insertion in first half: ", t.random_insertion(half_txt)+ " " +rem_txt])
     #7. antonym of half and insert random char in another half
-    result.append(naw.AntonymAug().augment(half_txt, n=1) + " " + nac.RandomCharAug('insert').augment(rem_txt, n=1))
+    result.append(["Antonym of first half and random character in second half: ", naw.AntonymAug().augment(half_txt, n=1) + " " + nac.RandomCharAug('insert').augment(rem_txt, n=1)])
     #8. antonym of half and swap char in other half
-    result.append(naw.AntonymAug().augment(rem_txt, n=1) + " " + nac.RandomCharAug('swap').augment(half_txt, n=1))
+    result.append(["Antonym of first half and swap character in second half: ", naw.AntonymAug().augment(rem_txt, n=1) + " " + nac.RandomCharAug('swap').augment(half_txt, n=1)])
     #9. antonym of half and swap word in another half
-    result.append(naw.AntonymAug().augment(rem_txt, n=1)+ " " +t.random_swap(half_txt),)
+    result.append(["Antonym of first half and swap word in second half: ", naw.AntonymAug().augment(rem_txt, n=1)+ " " +t.random_swap(half_txt),])
     return result
 
 
