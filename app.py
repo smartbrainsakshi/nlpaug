@@ -21,6 +21,7 @@ def my_form_post():
             t.random_swap(text),
             t.random_deletion(text, p=0.3),
             t.random_insertion(text),
+            naw.SynonymAug(aug_src='wordnet').augment(text, n=1),
         ]
     else:
         aug = nac.OcrAug()
