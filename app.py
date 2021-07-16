@@ -64,7 +64,7 @@ def evaluate_negative_augmentation(text):
     #3. make antonym of whole text and insert a special character at any position
     result.append(["Special character insertion: ", get_with_special_char(text)])
     #4. swap half of the sentence
-    result.append(["Swap in the first half of sentence: ", t.random_swap(half_txt)+ " " +rem_txt])
+    result.append(["Swap in the sentence: ", t.random_swap(half_txt)+ " " +rem_txt])
     #5. insert one random word in half text
     result.append(["Sentence insertion: ", t.random_insertion(half_txt)+ " " +rem_txt])
     return result
