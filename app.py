@@ -10,10 +10,31 @@ import emoji
 
 app = Flask(__name__)
 
+positive_options = [
+    "Random word swap",
+    "Random word delete",
+    "Random word insert",
+    "Synonym Augmentation",
+    "OCR Augmentation",
+    "KeyBoard Augmentation",
+    "Random Char insert",
+    "Random Char swap",
+    "Random Char delete",
+]
+negative_options = [
+    "Text to emoji",
+    "Antonym of text",
+    "Insert sentence",
+    "Special character insertion",
+    "Swap in the sentence",
+    "Sentence insertion",
+]
+
 # home page
 @app.route('/index')
 def my_form():
-    return render_template('index.html',input_text="")
+
+    return render_template('index.html',input_text="", positive_options=positive_options, negative_options=negative_options)
 
 # form view
 @app.route('/index', methods=['POST'])
@@ -23,22 +44,13 @@ def my_form_post():
     if request.form['group1'] == 'Positive':
         t = EDA()
         t1 = Wordnet()
-        result = [
-            ["Random word swap: ", t.random_swap(text)],
-            ["Random word delete: ", t.random_deletion(text, p=0.3)],
-            ["Random word insert: ", t.random_insertion(text)],
-            ["Synonym Augmentation: ", naw.SynonymAug(aug_src='wordnet').augment(text, n=1)],
-            ["OCR Augmentation: ", nac.OcrAug().augment(text, n=1)],
-            ["KeyBoard Augmentation: ", nac.KeyboardAug().augment(text, n=1)],
-            ["Random Char insert", nac.RandomCharAug('insert').augment(text, n=1)],
-            ["Random Char swap", nac.RandomCharAug('swap').augment(text, n=1)],
-            ["Random Char delete", nac.RandomCharAug('delete').augment(text, n=1)],
-        ]
+        logic = request.form['pos-logic']
+        result = [[logic, apply_pos_logic(logic, text, t)]]
 
     else:
         result = evaluate_negative_augmentation(text)
 
-    return render_template('index.html', result=result, input_text=text)
+    return render_template('index.html', result=result, input_text=text, positive_options=positive_options, negative_options=negative_options)
 
 
 # helper functions are below
@@ -50,23 +62,30 @@ def evaluate_negative_augmentation(text):
     rem_txt = " ".join(words[int(len(words)/2):])
     n = int(len(words)/2)
     result = []
+    logic = request.form['neg-logic']
 
     #0. replace with emojis
-    result.append(["Text to emoji: ", text_to_emoji(text)])
+    if logic == "Text to emoji":
+        result.append(["Text to emoji", text_to_emoji(text)])
     #1. make antonym of whole text
-    result.append(["Antonym of text: ", naw.AntonymAug().augment(text, n=1)])
+    elif logic == "Antonym of text":
+        result.append(["Antonym of text", naw.AntonymAug().augment(text, n=1)])
     #2. insert n words in the half sentence, where n = half of size of sentence
-    try:
-        rand_index = random.randint(0,n)
-        result.append(["Insert sentence: ", t.random_insertion(sentence=words[rand_index], n=n)+ " " +rem_txt])
-    except:
-        pass
+    elif logic == "Insert sentence":
+        try:
+            rand_index = random.randint(0,n)
+            result.append(["Insert sentence", t.random_insertion(sentence=words[rand_index], n=n)+ " " +rem_txt])
+        except:
+            pass
     #3. make antonym of whole text and insert a special character at any position
-    result.append(["Special character insertion: ", get_with_special_char(text)])
+    elif logic == "Special character insertion":
+        result.append(["Special character insertion", get_with_special_char(text)])
     #4. swap half of the sentence
-    result.append(["Swap in the sentence: ", t.random_swap(half_txt)+ " " +rem_txt])
+    elif logic == "Swap in the sentence":
+        result.append(["Swap in the sentence", t.random_swap(half_txt)+ " " +rem_txt])
     #5. insert one random word in half text
-    result.append(["Sentence insertion: ", t.random_insertion(half_txt)+ " " +rem_txt])
+    elif logic == "Sentence insertion":
+        result.append(["Sentence insertion", t.random_insertion(half_txt)+ " " +rem_txt])
     return result
 
 
@@ -98,6 +117,26 @@ def text_to_emoji(text):
             sent.append(each.replace(":", ""))
     return " ".join(sent)
 
+
+def apply_pos_logic(logic, text, t):
+    if logic=="Random word swap": 
+        return t.random_swap(text)
+    elif logic=="Random word delete":
+        return t.random_deletion(text, p=0.3)
+    elif logic=="Random word insert": 
+        return t.random_insertion(text)
+    elif logic=="Synonym Augmentation": 
+        return naw.SynonymAug(aug_src='wordnet').augment(text, n=1)
+    elif logic=="OCR Augmentation": 
+        return nac.OcrAug().augment(text, n=1)
+    elif logic=="KeyBoard Augmentation": 
+        return nac.KeyboardAug().augment(text, n=1)
+    elif logic=="Random Char insert": 
+        a= nac.RandomCharAug('insert').augment(text, n=1)
+    elif logic=="Random Char swap": 
+        return nac.RandomCharAug('swap').augment(text, n=1)
+    elif logic=="Random Char delete": 
+        return nac.RandomCharAug('delete').augment(text, n=1)
 
 if __name__ == "__main__":
     app.run(debug=True)

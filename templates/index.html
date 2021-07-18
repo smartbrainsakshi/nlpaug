@@ -3,8 +3,6 @@
 
  <!-- Compiled and minified JavaScript -->
  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-         
-
 
  <nav class="green">
     <div class="nav-wrapper">
@@ -36,9 +34,34 @@
                 </label>
               </p>
         </div>
+        {% if positive_options %}
+        <div class="input-field col s12" name=".Positive">
+          <select class="browser-default" name='pos-logic'>
+            <option value="" disabled selected>Choose positive augmentation logic</option>
+            {% for each in positive_options %}    
+            <option value="{{each}}">{{each}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% endif %}
+
+        {% if negative_options %}
+        <div class="input-field col s12" name=".Negative">
+          <select class="browser-default" name='neg-logic'>
+            <option value="" disabled selected>Choose negative augmentation logic</option>
+            {% for each in negative_options %}    
+            <option value="{{each}}">{{each}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% endif %}
+
         <div class="input-field col s12"></div>
             <input class="button" type="submit" />
         </div>
+
+
+
        </form>
        {% if result %}
       <table class="striped">
